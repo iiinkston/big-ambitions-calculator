@@ -79,7 +79,7 @@ def compute_min_setup(business: str, building_code: str):
     plan = []
     checkout_points = 0
 
-    # ✅ 获取该业务的品类数
+    # 获取当前业务需要的品类数
     category_count = CATEGORY_COUNT_BY_BUSINESS.get(business, 1)
 
     for gname, opts in groups.items():
