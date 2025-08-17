@@ -79,45 +79,97 @@ def compute_min_setup(business: str, building_code: str):
     plan = []
     checkout_points = 0
 
-    # ✅ 获取该业务的品类数
+    # 获取该业务的品类数
     category_count = CATEGORY_COUNT_BY_BUSINESS.get(business, 1)
 
-    for gname, opts in groups.items():
-        if gname == "shelf":
-            best = pick_min_combo_for_group(target, opts)
-            total_count = best["total_count"] * category_count
-            total_capacity = best["total_capacity"] * category_count
-            combo = []
-            for it in best["combo"]:
-                combo.append(
+    if business == "coffee_shop":
+        # --- 面包展示柜 (3个品类) ---
+        best_bakery = pick_min_combo_for_group(target, groups.get("shelf_bakery", []))
+        total_count = best_bakery["total_count"] * 3
+        total_capacity = best_bakery["total_capacity"] * 3
+        combo = []
+        for it in best_bakery["combo"]:
+            combo.append(
+                {
+                    "furniture_name": it["furniture_name"],
+                    "furniture_key": it["furniture_key"],
+                    "each_capacity": it["each_capacity"],
+                    "count": it["count"] * 3,
+                    "subtotal_capacity": it["subtotal_capacity"] * 3,
+                }
+            )
+        plan.append(
+            {
+                "group": "面包展示柜",
+                "total_capacity": total_capacity,
+                "total_count": total_count,
+                "combo": combo,
+            }
+        )
+
+        # --- 工业咖啡机 ---
+        best_coffee = pick_min_combo_for_group(target, groups.get("shelf_coffee", []))
+        plan.append(
+            {
+                "group": "工业咖啡机",
+                "total_capacity": best_coffee["total_capacity"],
+                "total_count": best_coffee["total_count"],
+                "combo": best_coffee["combo"],
+            }
+        )
+
+        # --- 收银和托盘 ---
+        for gname, opts in groups.items():
+            if gname in ["basket", "checkout"]:
+                best = pick_min_combo_for_group(target, opts)
+                plan.append(
                     {
-                        "furniture_name": it["furniture_name"],
-                        "furniture_key": it["furniture_key"],
-                        "each_capacity": it["each_capacity"],
-                        "count": it["count"] * category_count,
-                        "subtotal_capacity": it["subtotal_capacity"] * category_count,
+                        "group": gname,
+                        "total_capacity": best["total_capacity"],
+                        "total_count": best["total_count"],
+                        "combo": best["combo"],
                     }
                 )
-            plan.append(
-                {
-                    "group": gname,
-                    "total_capacity": total_capacity,
-                    "total_count": total_count,
-                    "combo": combo,
-                }
-            )
-        else:
-            best = pick_min_combo_for_group(target, opts)
-            plan.append(
-                {
-                    "group": gname,
-                    "total_capacity": best["total_capacity"],
-                    "total_count": best["total_count"],
-                    "combo": best["combo"],
-                }
-            )
-            if gname == "checkout":
-                checkout_points = best["total_count"]
+                if gname == "checkout":
+                    checkout_points = best["total_count"]
+    else:
+        for gname, opts in groups.items():
+            if gname == "shelf":
+                best = pick_min_combo_for_group(target, opts)
+                total_count = best["total_count"] * category_count
+                total_capacity = best["total_capacity"] * category_count
+                combo = []
+                for it in best["combo"]:
+                    combo.append(
+                        {
+                            "furniture_name": it["furniture_name"],
+                            "furniture_key": it["furniture_key"],
+                            "each_capacity": it["each_capacity"],
+                            "count": it["count"] * category_count,
+                            "subtotal_capacity": it["subtotal_capacity"]
+                            * category_count,
+                        }
+                    )
+                plan.append(
+                    {
+                        "group": gname,
+                        "total_capacity": total_capacity,
+                        "total_count": total_count,
+                        "combo": combo,
+                    }
+                )
+            else:
+                best = pick_min_combo_for_group(target, opts)
+                plan.append(
+                    {
+                        "group": gname,
+                        "total_capacity": best["total_capacity"],
+                        "total_count": best["total_count"],
+                        "combo": best["combo"],
+                    }
+                )
+                if gname == "checkout":
+                    checkout_points = best["total_count"]
 
     employees_min = checkout_points + 1
     return {

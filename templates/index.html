@@ -127,7 +127,7 @@
     <tbody>
       {% for row in result.plan %}
       <tr>
-        <td>{{ {"basket":"购物篮","checkout":"结账/收银","shelf":"书架"}[row.group] }}</td>
+        <td>{{ {"basket":"购物篮","checkout":"结账/收银","shelf":"展示/陈列区"}[row.group] }}</td>
         <td>
           {% for it in row.combo %}
           <div>{{ it.furniture_name }} × {{ it.count }}（{{ it.each_capacity }}/小时）</div>
