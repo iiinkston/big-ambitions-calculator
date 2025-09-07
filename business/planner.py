@@ -213,6 +213,74 @@ def compute_min_setup(business: str, building_code: str):
                 )
                 if gname == "checkout":
                     checkout_points = best["total_count"]
+        # --- 珠宝店逻辑 ---
+    elif business == "jewelry_store":
+        # 廉价珠宝
+        best_jewelry_cheap = pick_min_combo_for_group(
+            target, groups.get("shelf_jewelry_cheap", [])
+        )
+        plan.append(
+            {
+                "group": "廉价珠宝",
+                "total_capacity": best_jewelry_cheap["total_capacity"],
+                "total_count": best_jewelry_cheap["total_count"],
+                "combo": best_jewelry_cheap["combo"],
+            }
+        )
+
+        # 昂贵珠宝
+        best_jewelry_exp = pick_min_combo_for_group(
+            target, groups.get("shelf_jewelry_exp", [])
+        )
+        plan.append(
+            {
+                "group": "昂贵珠宝",
+                "total_capacity": best_jewelry_exp["total_capacity"],
+                "total_count": best_jewelry_exp["total_count"],
+                "combo": best_jewelry_exp["combo"],
+            }
+        )
+
+        # 雅鱼手表
+        best_watch_yayu = pick_min_combo_for_group(
+            target, groups.get("shelf_watch_yayu", [])
+        )
+        plan.append(
+            {
+                "group": "雅鱼智能手表",
+                "total_capacity": best_watch_yayu["total_capacity"],
+                "total_count": best_watch_yayu["total_count"],
+                "combo": best_watch_yayu["combo"],
+            }
+        )
+
+        # 赞纳手表
+        best_watch_zana = pick_min_combo_for_group(
+            target, groups.get("shelf_watch_zana", [])
+        )
+        plan.append(
+            {
+                "group": "赞纳智能手表",
+                "total_capacity": best_watch_zana["total_capacity"],
+                "total_count": best_watch_zana["total_count"],
+                "combo": best_watch_zana["combo"],
+            }
+        )
+
+        # 收银 / 购物篮
+        for gname, opts in groups.items():
+            if gname in ["basket", "checkout"]:
+                best = pick_min_combo_for_group(target, opts)
+                plan.append(
+                    {
+                        "group": gname,
+                        "total_capacity": best["total_capacity"],
+                        "total_count": best["total_count"],
+                        "combo": best["combo"],
+                    }
+                )
+                if gname == "checkout":
+                    checkout_points = best["total_count"]
 
     # --- 其他通用逻辑（书店、服装店、电器商店等） ---
     else:
