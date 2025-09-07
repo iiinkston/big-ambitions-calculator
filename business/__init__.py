@@ -22,6 +22,12 @@ from .electronics_store import (
     CATEGORY_COUNT as ELECTRONICS_CATEGORY_COUNT,
 )
 
+from .gift_store import (
+    GIFT_STORE_FURNITURE,
+    BUSINESS_LABEL as GIFT_STORE_LABEL,
+    CATEGORY_COUNT as GIFT_STORE_CATEGORY_COUNT,
+)
+
 
 # 各业务家具配置
 BUSINESS_SPECS = {
@@ -29,6 +35,7 @@ BUSINESS_SPECS = {
     "clothing_store": CLOTHING_FURNITURE,
     "coffee_shop": COFFEE_SHOP_FURNITURE,
     "electronics_store": ELECTRONICS_FURNITURE,
+    "gift_store": GIFT_STORE_FURNITURE,
 }
 
 # 业务显示名称
@@ -37,6 +44,7 @@ BUSINESS_LABELS = {
     "clothing_store": CLOTHING_LABEL,
     "coffee_shop": COFFEE_SHOP_LABEL,
     "electronics_store": ELECTRONICS_LABEL,
+    "gift_store": GIFT_STORE_LABEL,
 }
 
 # 每个业务需要的品类数
@@ -45,6 +53,7 @@ CATEGORY_COUNT_BY_BUSINESS = {
     "clothing_store": CLOTHING_CATEGORY_COUNT,
     "coffee_shop": COFFEE_SHOP_CATEGORY_COUNT,
     "electronics_store": ELECTRONICS_CATEGORY_COUNT,
+    "gift_store": GIFT_STORE_CATEGORY_COUNT,
 }
 
 # 各类建筑的客人容量（顾客/小时）

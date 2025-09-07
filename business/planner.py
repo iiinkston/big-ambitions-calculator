@@ -79,11 +79,12 @@ def compute_min_setup(business: str, building_code: str):
     plan = []
     checkout_points = 0
 
-    # 获取该业务的品类数
+    # 默认分类数（书店/服装店用）
     category_count = CATEGORY_COUNT_BY_BUSINESS.get(business, 1)
 
+    # --- 咖啡店逻辑 ---
     if business == "coffee_shop":
-        # --- 面包展示柜 (3个品类) ---
+        # 面包展示柜：3个品类
         best_bakery = pick_min_combo_for_group(target, groups.get("shelf_bakery", []))
         total_count = best_bakery["total_count"] * 3
         total_capacity = best_bakery["total_capacity"] * 3
@@ -107,7 +108,7 @@ def compute_min_setup(business: str, building_code: str):
             }
         )
 
-        # --- 工业咖啡机 ---
+        # 工业咖啡机
         best_coffee = pick_min_combo_for_group(target, groups.get("shelf_coffee", []))
         plan.append(
             {
@@ -118,7 +119,7 @@ def compute_min_setup(business: str, building_code: str):
             }
         )
 
-        # --- 收银和托盘 ---
+        # 收银 / 托盘
         for gname, opts in groups.items():
             if gname in ["basket", "checkout"]:
                 best = pick_min_combo_for_group(target, opts)
@@ -132,6 +133,88 @@ def compute_min_setup(business: str, building_code: str):
                 )
                 if gname == "checkout":
                     checkout_points = best["total_count"]
+
+    # --- 礼品店逻辑 ---
+    elif business == "gift_store":
+        # 廉价礼品
+        best_gift_cheap = pick_min_combo_for_group(
+            target, groups.get("shelf_gift_cheap", [])
+        )
+        plan.append(
+            {
+                "group": "廉价礼品",
+                "total_capacity": best_gift_cheap["total_capacity"],
+                "total_count": best_gift_cheap["total_count"],
+                "combo": best_gift_cheap["combo"],
+            }
+        )
+
+        # 昂贵礼品
+        best_gift_expensive = pick_min_combo_for_group(
+            target, groups.get("shelf_gift_expensive", [])
+        )
+        plan.append(
+            {
+                "group": "昂贵礼品",
+                "total_capacity": best_gift_expensive["total_capacity"],
+                "total_count": best_gift_expensive["total_count"],
+                "combo": best_gift_expensive["combo"],
+            }
+        )
+
+        # 廉价花卉
+        best_flower_cheap = pick_min_combo_for_group(
+            target, groups.get("shelf_flower_cheap", [])
+        )
+        plan.append(
+            {
+                "group": "廉价花卉",
+                "total_capacity": best_flower_cheap["total_capacity"],
+                "total_count": best_flower_cheap["total_count"],
+                "combo": best_flower_cheap["combo"],
+            }
+        )
+
+        # 昂贵花卉
+        best_flower_expensive = pick_min_combo_for_group(
+            target, groups.get("shelf_flower_expensive", [])
+        )
+        plan.append(
+            {
+                "group": "昂贵花卉",
+                "total_capacity": best_flower_expensive["total_capacity"],
+                "total_count": best_flower_expensive["total_count"],
+                "combo": best_flower_expensive["combo"],
+            }
+        )
+
+        # 汽水
+        best_drink = pick_min_combo_for_group(target, groups.get("shelf_drink", []))
+        plan.append(
+            {
+                "group": "碳酸汽水",
+                "total_capacity": best_drink["total_capacity"],
+                "total_count": best_drink["total_count"],
+                "combo": best_drink["combo"],
+            }
+        )
+
+        # 收银 / 购物篮
+        for gname, opts in groups.items():
+            if gname in ["basket", "checkout"]:
+                best = pick_min_combo_for_group(target, opts)
+                plan.append(
+                    {
+                        "group": gname,
+                        "total_capacity": best["total_capacity"],
+                        "total_count": best["total_count"],
+                        "combo": best["combo"],
+                    }
+                )
+                if gname == "checkout":
+                    checkout_points = best["total_count"]
+
+    # --- 其他通用逻辑（书店、服装店、电器商店等） ---
     else:
         for gname, opts in groups.items():
             if gname == "shelf":
