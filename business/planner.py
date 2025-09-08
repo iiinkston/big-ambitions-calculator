@@ -281,6 +281,109 @@ def compute_min_setup(business: str, building_code: str):
                 )
                 if gname == "checkout":
                     checkout_points = best["total_count"]
+        # --- 快餐店逻辑 ---
+    elif business == "fastfood_store":
+        # 汉堡
+        best_burger = pick_min_combo_for_group(target, groups.get("shelf_burger", []))
+        plan.append(
+            {
+                "group": "汉堡",
+                "total_capacity": best_burger["total_capacity"],
+                "total_count": best_burger["total_count"],
+                "combo": best_burger["combo"],
+            }
+        )
+
+        # 薯条
+        best_fries = pick_min_combo_for_group(target, groups.get("shelf_fries", []))
+        plan.append(
+            {
+                "group": "炸薯条",
+                "total_capacity": best_fries["total_capacity"],
+                "total_count": best_fries["total_count"],
+                "combo": best_fries["combo"],
+            }
+        )
+
+        # 热狗
+        best_hotdog = pick_min_combo_for_group(target, groups.get("shelf_hotdog", []))
+        plan.append(
+            {
+                "group": "热狗",
+                "total_capacity": best_hotdog["total_capacity"],
+                "total_count": best_hotdog["total_count"],
+                "combo": best_hotdog["combo"],
+            }
+        )
+
+        # 冰淇淋
+        best_icecream = pick_min_combo_for_group(
+            target, groups.get("shelf_icecream", [])
+        )
+        plan.append(
+            {
+                "group": "冰淇淋",
+                "total_capacity": best_icecream["total_capacity"],
+                "total_count": best_icecream["total_count"],
+                "combo": best_icecream["combo"],
+            }
+        )
+
+        # 烤肉串
+        best_kebab = pick_min_combo_for_group(target, groups.get("shelf_kebab", []))
+        plan.append(
+            {
+                "group": "烤肉串",
+                "total_capacity": best_kebab["total_capacity"],
+                "total_count": best_kebab["total_count"],
+                "combo": best_kebab["combo"],
+            }
+        )
+
+        # 披萨
+        best_pizza = pick_min_combo_for_group(target, groups.get("shelf_pizza", []))
+        plan.append(
+            {
+                "group": "披萨",
+                "total_capacity": best_pizza["total_capacity"],
+                "total_count": best_pizza["total_count"],
+                "combo": best_pizza["combo"],
+            }
+        )
+
+        # 沙拉
+        best_salad = pick_min_combo_for_group(target, groups.get("shelf_salad", []))
+        plan.append(
+            {
+                "group": "沙拉",
+                "total_capacity": best_salad["total_capacity"],
+                "total_count": best_salad["total_count"],
+                "combo": best_salad["combo"],
+            }
+        )
+
+        # 汽水
+        best_drink = pick_min_combo_for_group(target, groups.get("shelf_drink", []))
+        plan.append(
+            {
+                "group": "碳酸汽水",
+                "total_capacity": best_drink["total_capacity"],
+                "total_count": best_drink["total_count"],
+                "combo": best_drink["combo"],
+            }
+        )
+
+        # 收银
+        best_checkout = pick_min_combo_for_group(target, groups.get("checkout", []))
+        plan.append(
+            {
+                "group": "checkout",
+                "total_capacity": best_checkout["total_capacity"],
+                "total_count": best_checkout["total_count"],
+                "combo": best_checkout["combo"],
+            }
+        )
+        checkout_points = best_checkout["total_count"]
 
     # --- 其他通用逻辑（书店、服装店、电器商店等） ---
     else:
